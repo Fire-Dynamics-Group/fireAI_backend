@@ -4,7 +4,7 @@ import os
 from openai import OpenAI
 from prompts import assistant_instructions
 from dotenv import load_dotenv
-
+from query_chroma import query_chroma
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
@@ -19,8 +19,8 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 # Add lead to Airtable
 def vector_search(query):
   # vectorize query
-  print("test query vecotorized")
-  return query  
+  context = query_chroma(query)
+  return context  
   # return query
   # query_vector = client.embeddings.vectorize(query)
   # # search for similar vectors

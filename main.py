@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from openai import OpenAI
 import functions
-
+from query_chroma import query_chroma
 # from packaging import version
 from dotenv import load_dotenv
 
@@ -21,7 +21,7 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 #     )
 # else:
 #     print("OpenAI version is compatible.")
-
+global context
 app = FastAPI()
 
 app.add_middleware(
@@ -58,24 +58,35 @@ async def start_conversation():
     print("New conversation started with thread ID:", thread.id)
     return {"thread_id": thread.id}
 
+# TODO: send sources first
+# allow user to see appropriate sections of pdf
+# LATER: allow overlay of response/pop out chat?
+# highlight part of pdf
 @app.post("/chat")
 async def chat(chat_request: ChatRequest):
     thread_id = chat_request.thread_id
     user_input = chat_request.message
+    global context
     if not thread_id:
         print("Error: Missing thread_id in /chat")
         raise HTTPException(status_code=400, detail="Missing thread_id")
     print("Received message for thread ID:", thread_id, "Message:", user_input)
-
-    client.beta.threads.messages.create(thread_id=thread_id, role="user", content=user_input)
+    # query chroma here
+    context = query_chroma(user_input)
+    context_text = [result[0].page_content for result in context]
+    context_text = ';'.join(context_text)
+    print("context_text:", context_text)
+    content = f"context:'''{context_text}'''user input:'''{user_input}'''"
+    client.beta.threads.messages.create(thread_id=thread_id, role="user", content=content)
     run = client.beta.threads.runs.create(thread_id=thread_id, assistant_id=assistant_id)
     print("Run started with ID:", run.id)
-    return {"run_id": run.id}
+    return {"run_id": run.id, "context": [f[0] for f in context]}
 
 @app.post("/check")
 async def check_run_status(check_request: CheckRequest):
     thread_id = check_request.thread_id
     run_id = check_request.run_id
+    global context
     if not thread_id or not run_id:
         print("Error: Missing thread_id or run_id in /check")
         raise HTTPException(status_code=400, detail="Missing thread_id or run_id")
@@ -94,7 +105,8 @@ async def check_run_status(check_request: CheckRequest):
             for annotation in annotations:
                 message_content.value = message_content.value.replace(annotation.text, '')
             print("Run completed, returning response")
-            return {"response": message_content.value, "status": "completed"}
+            # print("context:", context)
+            return {"response": message_content.value, "status": "completed", "context": [f[0] for f in context]}
 
         if run_status.status == 'requires_action':
             print("Action in progress...")
@@ -103,6 +115,7 @@ async def check_run_status(check_request: CheckRequest):
                 if tool_call.function.name == "vector_search":
                     arguments = json.loads(tool_call.function.arguments)
                     output = functions.vector_search(arguments["query"])
+                    # context = output
                     client.beta.threads.runs.submit_tool_outputs(thread_id=thread_id, run_id=run_id, tool_outputs=[{"tool_call_id": tool_call.id, "output": json.dumps(output)}])
         time.sleep(1)
 
