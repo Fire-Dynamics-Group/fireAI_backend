@@ -51,7 +51,7 @@ monotonic==1.6
 mpmath==1.3.0
 multidict==6.0.4
 mypy-extensions==1.0.0
-numpy==1.26.2
+numpy==1.22.0
 oauthlib==3.2.2
 onnxruntime==1.16.3
 openai==1.3.7
@@ -79,7 +79,6 @@ PyPika==0.48.9
 pyreadline3==3.4.1
 python-dateutil==2.8.2
 python-dotenv==1.0.0
-python==3.9.7
 PyYAML==6.0.1
 regex==2023.12.25
 requests==2.31.0
