@@ -20,4 +20,11 @@ RUN echo "Port: $PORT"
 EXPOSE 8000
 
 # Command to run the application
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+# CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+
+# Copy start script to container
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
+# Start the application using the script
+CMD ["/app/start.sh"]

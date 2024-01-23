@@ -38,6 +38,9 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 assistant_id = functions.create_assistant(client)
 print("Assistant created with ID:", assistant_id)
 
+port = os.getenv("PORT", "Default Port (8000)")
+print(f"Application starting on port: {port}")
+
 class ChatRequest(BaseModel):
     thread_id: str
     message: str
