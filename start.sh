@@ -1,7 +1,11 @@
-#!/bin/bash
+# Echo the port number for debugging
+echo "Port variable is set to: '${PORT}'"
 
-# Echo the port number
-echo "Starting application on port: ${PORT:-8000}"
+# Check if PORT is not set or empty
+if [ -z "$PORT" ]; then
+    echo "WARNING: \$PORT variable is not set. Defaulting to 8000."
+    PORT=8000
+fi
 
 # Start the Uvicorn server
-exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}
+exec uvicorn app.main:app --host 0.0.0.0 --port $PORT
