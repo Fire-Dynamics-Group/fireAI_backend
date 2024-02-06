@@ -76,7 +76,7 @@ pydantic
 pydantic_core
 pypdf
 PyPika
-pyreadline3==3.4.0
+pyreadline3==3.3
 python
 python-dotenv
 PyYAML
