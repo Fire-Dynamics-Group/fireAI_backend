@@ -7,5 +7,5 @@ if [ -z "$PORT" ]; then
     PORT=8000
 fi
 
-# Start the Uvicorn server
-exec uvicorn app.main:app --host 0.0.0.0 --port $PORT
+# Start the Uvicorn server with the corrected module path
+exec uvicorn main:app --host 0.0.0.0 --port $PORT
