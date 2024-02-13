@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 from langchain.embeddings import OpenAIEmbeddings
 
+import json
 # TODO: setup for pinecone
 # search filtering for metadata of source -> perhaps chapter etc later
 
