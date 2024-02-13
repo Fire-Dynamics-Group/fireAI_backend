@@ -1,12 +1,9 @@
-from langchain.vectorstores import Pinecone
-from pinecone import Pinecone, ServerlessSpec
-import pinecone
+from pinecone import Pinecone
 import os
 from dotenv import load_dotenv
 load_dotenv()
 from langchain.embeddings import OpenAIEmbeddings
 
-import json
 # TODO: setup for pinecone
 # search filtering for metadata of source -> perhaps chapter etc later
 
