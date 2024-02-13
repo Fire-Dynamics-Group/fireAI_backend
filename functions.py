@@ -4,7 +4,6 @@ import os
 from openai import OpenAI
 from prompts import assistant_instructions
 from dotenv import load_dotenv
-from query_chroma import query_chroma
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
@@ -14,36 +13,6 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 # Init OpenAI Client
 client = OpenAI(api_key=OPENAI_API_KEY)
-
-
-# Add lead to Airtable
-def vector_search(query):
-  # vectorize query
-  context = query_chroma(query)
-  return context  
-  # return query
-  # query_vector = client.embeddings.vectorize(query)
-  # # search for similar vectors
-  # response = client.beta.searches.search(query=query_vector)
-  # # return results that are above a certain threshold
-  # if response.data[0].score > 0.7:
-    
-  #   return response.data[0].document
-
-
-  # url = "https://api.airtable.com/v0/appZtfsCkZGK0MWG4/Tables"
-  # headers = {
-  #     "Authorization":
-  #     AIRTABLE_API_KEY,  # NOTE: When adding your Airtable API key in secrets it must include "Bearer YOURKEY", keeping the Bearer and the space. If you don't add this then it won't work!
-  #     "Content-Type": "application/json"
-  # }
-  # data = {"records": [{"fields": {"Name": name, "Phone": phone}}]}
-  # response = httpx.post(url, headers=headers, json=data)
-  # if response.status_code == 200:
-  #   print("Lead created successfully.")
-  #   return response.json()
-  # else:
-  #   print(f"Failed to create lead: {response.text}")
 
 
 # Create or load assistant
