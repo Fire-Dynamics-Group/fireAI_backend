@@ -1,2 +1,4 @@
 .env
 /knowledge_docs
+pdf_loader.py
+prompts
