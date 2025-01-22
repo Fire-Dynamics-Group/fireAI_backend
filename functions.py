@@ -12,7 +12,10 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 # AIRTABLE_API_KEY = os.getenv('AIRTABLE_API_KEY')
 
 # Init OpenAI Client
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(
+    api_key=OPENAI_API_KEY,
+    headers={"OpenAI-Beta": "assistants=v2"}
+)
 
 
 # Create or load assistant

@@ -32,7 +32,10 @@ app.add_middleware(
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
 )
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(
+    api_key=OPENAI_API_KEY,
+    headers={"OpenAI-Beta": "assistants=v2"}
+)
 
 # Load assistant ID from file or create new one
 assistant_id = functions.create_assistant(client)
