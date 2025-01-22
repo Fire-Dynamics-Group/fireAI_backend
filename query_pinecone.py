@@ -1,12 +1,9 @@
-from langchain.vectorstores import Pinecone
-from pinecone import Pinecone, ServerlessSpec
-import pinecone
+from pinecone import Pinecone
 import os
 from dotenv import load_dotenv
 load_dotenv()
 from langchain.embeddings import OpenAIEmbeddings
 
-import json
 # TODO: setup for pinecone
 # search filtering for metadata of source -> perhaps chapter etc later
 
@@ -24,11 +21,7 @@ def query_pinecone(query, filter=None, sources=['BS 9999-2017'], n=5):
         PINECONE_API_KEY,
         # environment=PINECONE_ENV
     )
-    # pinecone.init(
-    #     api_key=PINECONE_API_KEY,  # find at app.pinecone.io
-    #     environment=PINECONE_ENV  # next to api key in console
-    # )
-    # 
+
     index_name = "fire-docs"
     total_results = []
     # for source in sources: # later filter by source
